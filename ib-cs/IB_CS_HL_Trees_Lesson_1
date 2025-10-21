@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IB CS HL - Trees Lesson 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .slide {
+            min-height: 100vh;
+            scroll-snap-align: start;
+        }
+        .tree-node {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+            position: relative;
+        }
+        /* Style for highlighting SVG elements */
+        .highlighted-node {
+            stroke: #f59e0b;
+            stroke-width: 4px;
+            transition: all 0.2s ease-in-out;
+        }
+        .highlighted-subtree {
+            fill: rgba(251, 191, 36, 0.2);
+            stroke: #f59e0b;
+            stroke-width: 2px;
+            stroke-dasharray: 5,5;
+        }
+        .term-card {
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .term-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Main Container -->
+    <div class="container mx-auto p-4 md:p-8">
+
+        <!-- Slide 1: Title -->
+        <section id="title" class="slide flex flex-col items-center justify-center text-center">
+            <div class="bg-white p-12 rounded-2xl shadow-lg border border-slate-200">
+                <h1 class="text-5xl md:text-7xl font-bold text-blue-600">Trees</h1>
+                <p class="mt-4 text-2xl md:text-3xl text-slate-600">IB Computer Science HL</p>
+                <p class="mt-2 text-lg text-slate-500">Lesson 1: Introduction, Logic & Terminology</p>
+            </div>
+            <a href="#objectives" class="mt-16 text-blue-500 animate-bounce">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </a>
+        </section>
+
+        <!-- Slide 2: Objectives -->
+        <section id="objectives" class="slide flex flex-col items-center justify-center">
+            <div class="w-full max-w-4xl bg-white p-10 rounded-2xl shadow-lg border border-slate-200">
+                <h2 class="text-3xl font-bold text-center text-blue-600 mb-8">Lesson Objectives</h2>
+                <ul class="space-y-4 text-lg text-slate-700">
+                    <li class="flex items-start">
+                        <svg class="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span>Explain the logical structure of a tree using real-world examples.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span>Define and identify the <span class="font-semibold">root, parent, child, leaf,</span> and <span class="font-semibold">subtree</span> on a diagram.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span>Construct a physical Binary Search Tree (BST) from a given set of data.</span>
+                    </li>
+                </ul>
+            </div>
+            <a href="#activity1" class="mt-16 text-blue-500">↓ Next Activity</a>
+        </section>
+
+        <!-- Slide 3: Activity 1 - Human Tree -->
+        <section id="activity1" class="slide flex flex-col items-center justify-center">
+            <div class="w-full max-w-5xl bg-white p-10 rounded-2xl shadow-lg border border-slate-200">
+                <h2 class="text-3xl font-bold text-center text-blue-600 mb-2">Activity 1: The Human Tree</h2>
+                <p class="text-center text-slate-500 mb-8">(20 minutes)</p>
+                <div class="text-center">
+                    <p class="text-lg mb-6">Let's build a tree using people! We'll use this to learn the core terminology.</p>
+                    <!-- Visual representation of the human tree -->
+                    <div class="relative w-full max-w-xl mx-auto h-96">
+                        <!-- SVG lines (edges) -->
+                        <svg class="absolute top-0 left-0 w-full h-full" style="z-index: 1;">
+                           <line x1="50%" y1="48" x2="calc(50% - 100px)" y2="152" stroke="#9ca3af" stroke-width="2"/>
+                           <line x1="50%" y1="48" x2="calc(50% + 100px)" y2="152" stroke="#9ca3af" stroke-width="2"/>
+                           <line x1="calc(50% - 100px)" y1="192" x2="calc(50% - 150px)" y2="272" stroke="#9ca3af" stroke-width="2"/>
+                           <line x1="calc(50% - 100px)" y1="192" x2="calc(50% - 50px)" y2="272" stroke="#9ca3af" stroke-width="2"/>
+                        </svg>
+                        <!-- Nodes -->
+                        <div class="absolute w-24 h-24 tree-node bg-red-500" style="left: 50%; top: 0; transform: translateX(-50%); z-index: 2;">Root</div>
+                        <div class="absolute w-20 h-20 tree-node bg-blue-500" style="left: calc(50% - 100px); top: 152px; transform: translateX(-50%); z-index: 2;">Left-Child</div>
+                        <div class="absolute w-20 h-20 tree-node bg-blue-500" style="left: calc(50% + 100px); top: 152px; transform: translateX(-50%); z-index: 2;">Right-Child</div>
+                        <div class="absolute w-16 h-16 tree-node bg-green-500 text-sm" style="left: calc(50% - 150px); top: 272px; transform: translateX(-50%); z-index: 2;">Leaf</div>
+                        <div class="absolute w-16 h-16 tree-node bg-green-500 text-sm" style="left: calc(50% - 50px); top: 272px; transform: translateX(-50%); z-index: 2;">Leaf</div>
+                    </div>
+                </div>
+                 <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 text-slate-700">
+                    <div>
+                        <h3 class="font-bold text-xl text-blue-600">Key Terms</h3>
+                        <ul class="list-disc list-inside mt-2 space-y-1">
+                            <li><span class="font-semibold">Root:</span> The single top-most node.</li>
+                            <li><span class="font-semibold">Parent:</span> A node with children.</li>
+                            <li><span class="font-semibold">Left/Right-Child:</span> Nodes below a parent.</li>
+                            <li><span class="font-semibold">Leaf:</span> A node with NO children.</li>
+                            <li><span class="font-semibold">Subtree:</span> A parent and all its descendants.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="font-bold text-xl text-blue-800">Recursive Thinking</h3>
+                        <p class="mt-2">How can we describe a tree? "A tree is a <span class="font-semibold">root</span> node, connected to a left <span class="font-semibold">subtree</span> and a right <span class="font-semibold">subtree</span>."</p>
+                        <p class="mt-2 italic">A subtree is just a smaller tree. The structure is defined in terms of itself!</p>
+                    </div>
+                </div>
+            </div>
+             <a href="#activity2" class="mt-8 text-blue-500">↓ Next Activity</a>
+        </section>
+
+        <!-- Slide 4: Activity 2 - Formal Definitions -->
+        <section id="activity2" class="slide flex flex-col items-center justify-center">
+            <div class="w-full max-w-6xl bg-white p-10 rounded-2xl shadow-lg border border-slate-200">
+                <h2 class="text-3xl font-bold text-center text-blue-600 mb-2">Interactive Definitions</h2>
+                <p class="text-center text-slate-500 mb-8">(15 minutes)</p>
+                <p class="text-center text-lg mb-8">Hover over the "flash cards" to see the definition and highlight the corresponding part of the tree!</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <!-- Interactive SVG Diagram -->
+                    <div class="relative">
+                        <svg viewBox="0 0 300 200" id="interactive-tree">
+                            <!-- Subtree markers -->
+                            <g id="subtree-B-marker" class="transition-opacity opacity-0" data-marker="subtree-B">
+                                <path d="M 50 50 C 0 100, 0 150, 50 200 L 150 200 C 200 150, 200 100, 150 50 Z" class="highlighted-subtree"></path>
+                            </g>
+                            <!-- Edges -->
+                            <line x1="150" y1="25" x2="100" y2="75" stroke="#9ca3af" stroke-width="2"/>
+                            <line x1="150" y1="25" x2="200" y2="75" stroke="#9ca3af" stroke-width="2"/>
+                            <line x1="100" y1="75" x2="75" y2="125" stroke="#9ca3af" stroke-width="2"/>
+                            <line x1="100" y1="75" x2="125" y2="125" stroke="#9ca3af" stroke-width="2"/>
+                            <!-- Nodes -->
+                            <g id="node-A" class="tree-svg-node" data-marker="root parent"><circle cx="150" cy="25" r="15" fill="#60a5fa"/><text x="150" y="30" font-family="Inter" font-size="12" fill="white" text-anchor="middle">A</text></g>
+                            <g id="node-B" class="tree-svg-node" data-marker="child parent subtree-B"><circle cx="100" cy="75" r="15" fill="#60a5fa"/><text x="100" y="80" font-family="Inter" font-size="12" fill="white" text-anchor="middle">B</text></g>
+                            <g id="node-C" class="tree-svg-node" data-marker="child leaf"><circle cx="200" cy="75" r="15" fill="#60a5fa"/><text x="200" y="80" font-family="Inter" font-size="12" fill="white" text-anchor="middle">C</text></g>
+                            <g id="node-D" class="tree-svg-node" data-marker="child leaf subtree-B"><circle cx="75" cy="125" r="15" fill="#60a5fa"/><text x="75" y="130" font-family="Inter" font-size="12" fill="white" text-anchor="middle">D</text></g>
+                            <g id="node-E" class="tree-svg-node" data-marker="child leaf subtree-B"><circle cx="125" cy="125" r="15" fill="#60a5fa"/><text x="125" y="130" font-family="Inter" font-size="12" fill="white" text-anchor="middle">E</text></g>
+                        </svg>
+                    </div>
+                    <!-- Definition "Flash Cards" -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="term-card bg-slate-100 p-4 rounded-lg" data-target="root">
+                            <h3 class="font-bold text-lg text-blue-700">Root</h3><p class="text-sm">The single top-most node of the tree. (A)</p>
+                        </div>
+                        <div class="term-card bg-slate-100 p-4 rounded-lg" data-target="parent">
+                            <h3 class="font-bold text-lg text-blue-700">Parent</h3><p class="text-sm">Any node that has at least one child. (A, B)</p>
+                        </div>
+                         <div class="term-card bg-slate-100 p-4 rounded-lg" data-target="child">
+                            <h3 class="font-bold text-lg text-blue-700">Child</h3><p class="text-sm">A node connected directly below a parent. (B, C, D, E)</p>
+                        </div>
+                        <div class="term-card bg-slate-100 p-4 rounded-lg" data-target="leaf">
+                            <h3 class="font-bold text-lg text-blue-700">Leaf</h3><p class="text-sm">A node with no children. (C, D, E)</p>
+                        </div>
+                        <div class="term-card bg-slate-100 p-4 rounded-lg col-span-2" data-target="subtree-B">
+                            <h3 class="font-bold text-lg text-blue-700">Subtree</h3><p class="text-sm">A parent node and all of its descendants. (The tree starting from B)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <a href="#activity3" class="mt-8 text-blue-500">↓ Next Activity</a>
+        </section>
+
+        <!-- Slide 5: Activity 3 - Cup Stacking BST -->
+        <section id="activity3" class="slide flex flex-col items-center justify-center">
+            <div class="w-full max-w-5xl bg-white p-10 rounded-2xl shadow-lg border border-slate-200">
+                <h2 class="text-3xl font-bold text-center text-blue-600 mb-2">Activity 3: Cup-Stacking BSTs</h2>
+                <p class="text-center text-slate-500 mb-8">(25 minutes)</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h3 class="font-bold text-2xl mb-4">The Golden Rule</h3>
+                        <div class="bg-amber-100 border-l-4 border-amber-500 text-amber-800 p-4 rounded-r-lg">
+                           <p>Start at the root. If the new number is <span class="font-bold">LESS THAN</span> the node, go <span class="font-bold">LEFT</span>.</p>
+                           <p>If it's <span class="font-bold">GREATER THAN</span>, go <span class="font-bold">RIGHT</span>.</p>
+                           <p>Repeat until you find an empty spot!</p>
+                        </div>
+                        <h3 class="font-bold text-2xl mt-6 mb-4">Let's Build!</h3>
+                        <p>In your groups, add these numbers one by one using your cups:</p>
+                        <div class="mt-2 text-2xl font-mono bg-slate-100 p-4 rounded-lg text-center">
+                            [ 50, 30, 70, 20, 40, 80 ]
+                        </div>
+                    </div>
+                    <div>
+                        <button id="show-solution-btn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition-colors">Show Final Result</button>
+                        <div id="solution-tree" class="hidden">
+                             <p class="text-center mb-2 font-semibold">Final Result:</p>
+                             <div class="relative w-full max-w-sm mx-auto h-80 scale-90 md:scale-100">
+                                <!-- Level 0 -->
+                                <div class="absolute w-20 h-20 tree-node bg-slate-700" style="left: 50%; top: 0; transform: translateX(-50%);">50</div>
+                                <!-- Level 1 -->
+                                <div class="absolute w-20 h-20 tree-node bg-slate-600" style="left: calc(50% - 80px); top: 100px; transform: translateX(-50%);">30</div>
+                                <div class="absolute w-20 h-20 tree-node bg-slate-600" style="left: calc(50% + 80px); top: 100px; transform: translateX(-50%);">70</div>
+                                <!-- Level 2 -->
+                                <div class="absolute w-20 h-20 tree-node bg-slate-500" style="left: calc(50% - 140px); top: 200px; transform: translateX(-50%);">20</div>
+                                <div class="absolute w-20 h-20 tree-node bg-slate-500" style="left: calc(50% - 20px); top: 200px; transform: translateX(-50%);">40</div>
+                                <div class="absolute w-20 h-20 tree-node bg-slate-500" style="left: calc(50% + 140px); top: 200px; transform: translateX(-50%);">80</div>
+                                <!-- Lines -->
+                                <svg class="absolute top-0 left-0 w-full h-full" style="z-index: -1;">
+                                    <line x1="50%" y1="40" x2="calc(50% - 80px)" y2="140" stroke="#9ca3af" stroke-width="2"/>
+                                    <line x1="50%" y1="40" x2="calc(50% + 80px)" y2="140" stroke="#9ca3af" stroke-width="2"/>
+                                    <line x1="calc(50% - 80px)" y1="140" x2="calc(50% - 140px)" y2="240" stroke="#9ca3af" stroke-width="2"/>
+                                    <line x1="calc(50% - 80px)" y1="140" x2="calc(50% - 20px)" y2="240" stroke="#9ca3af" stroke-width="2"/>
+                                    <line x1="calc(50% + 80px)" y1="140" x2="calc(50% + 140px)" y2="240" stroke="#9ca3af" stroke-width="2"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <a href="#activity4" class="mt-8 text-blue-500">↓ Next Activity</a>
+        </section>
+
+        <!-- Slide 6: Activity 4 - Exit Ticket -->
+        <section id="activity4" class="slide flex flex-col items-center justify-center">
+            <div class="w-full max-w-4xl bg-white p-10 rounded-2xl shadow-lg border border-slate-200">
+                <h2 class="text-3xl font-bold text-center text-blue-600 mb-2">Exit Ticket: Label the Tree</h2>
+                <p class="text-center text-slate-500 mb-8">(10 minutes)</p>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                     <div class="text-center md:text-left">
+                        <p class="text-lg mb-6">Using the tree diagram, complete the following tasks:</p>
+                        <ul class="list-none space-y-3">
+                           <li class="p-3 bg-slate-100 rounded-lg">1. <span class="font-semibold">Circle</span> the root.</li>
+                           <li class="p-3 bg-slate-100 rounded-lg">2. Put a <span class="font-semibold">square</span> around all the leaves.</li>
+                           <li class="p-3 bg-slate-100 rounded-lg">3. <span class="font-semibold">Shade</span> the entire right-subtree of the root.</li>
+                           <li class="p-3 bg-slate-100 rounded-lg">4. Draw an <span class="font-semibold">arrow</span> from one parent to its left-child.</li>
+                        </ul>
+                    </div>
+                     <div class="flex items-center justify-center">
+                         <svg viewBox="0 0 200 150">
+                            <!-- Edges -->
+                            <line x1="100" y1="20" x2="50" y2="70" stroke="#9ca3af" stroke-width="2"/>
+                            <line x1="100" y1="20" x2="150" y2="70" stroke="#9ca3af" stroke-width="2"/>
+                            <line x1="50" y1="70" x2="25" y2="120" stroke="#9ca3af" stroke-width="2"/>
+                            <line x1="150" y1="70" x2="175" y2="120" stroke="#9ca3af" stroke-width="2"/>
+                            <!-- Nodes -->
+                            <circle cx="100" cy="20" r="15" fill="#60a5fa"/><text x="100" y="24" font-family="Inter" font-size="10" fill="white" text-anchor="middle">10</text>
+                            <circle cx="50" cy="70" r="15" fill="#60a5fa"/><text x="50" y="74" font-family="Inter" font-size="10" fill="white" text-anchor="middle">5</text>
+                            <circle cx="150" cy="70" r="15" fill="#60a5fa"/><text x="150" y="74" font-family="Inter" font-size="10" fill="white" text-anchor="middle">15</text>
+                            <circle cx="25" cy="120" r="15" fill="#60a5fa"/><text x="25" y="124" font-family="Inter" font-size="10" fill="white" text-anchor="middle">2</text>
+                            <circle cx="175" cy="120" r="15" fill="#60a5fa"/><text x="175" y="124" font-family="Inter" font-size="10" fill="white" text-anchor="middle">20</text>
+                        </svg>
+                     </div>
+                </div>
+                <div class="mt-8 text-center">
+                     <h3 class="font-bold text-xl text-blue-600">Well Done!</h3>
+                     <p class="mt-2">Next lesson, we will learn how to walk through these trees and modify them.</p>
+                </div>
+            </div>
+             <a href="#title" class="mt-16 text-blue-500">↑ Back to Top</a>
+        </section>
+
+    </div>
+
+    <script>
+        // --- Interactive Definitions for Activity 2 ---
+        const termCards = document.querySelectorAll('.term-card');
+        const allNodes = document.querySelectorAll('.tree-svg-node');
+        const allMarkers = document.querySelectorAll('[data-marker]');
+
+        termCards.forEach(card => {
+            card.addEventListener('mouseover', () => {
+                const targetClass = card.dataset.target;
+
+                // Highlight nodes
+                allNodes.forEach(node => {
+                    if (node.dataset.marker.includes(targetClass)) {
+                        node.querySelector('circle').classList.add('highlighted-node');
+                    }
+                });
+
+                // Highlight subtree area
+                const subtreeMarker = document.getElementById(`subtree-${targetClass}-marker`);
+                if (subtreeMarker) {
+                    subtreeMarker.classList.remove('opacity-0');
+                }
+            });
+
+            card.addEventListener('mouseout', () => {
+                allNodes.forEach(node => {
+                     node.querySelector('circle').classList.remove('highlighted-node');
+                });
+                allMarkers.forEach(marker => {
+                    if(marker.id.includes('subtree')) {
+                        marker.classList.add('opacity-0');
+                    }
+                })
+            });
+        });
+
+        // --- Show Solution Button for Activity 3 ---
+        const showSolutionBtn = document.getElementById('show-solution-btn');
+        const solutionTree = document.getElementById('solution-tree');
+
+        showSolutionBtn.addEventListener('click', () => {
+            solutionTree.classList.remove('hidden');
+            showSolutionBtn.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
+
