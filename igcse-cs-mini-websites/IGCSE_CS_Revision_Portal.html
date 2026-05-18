@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pearson Edexcel iGCSE CS Revision Portal 🎯</title>
+  <meta name="description" content="An interactive revision portal for Pearson Edexcel International GCSE Computer Science (4CP0) featuring interactive checklists, pseudocode guide, and active recall drills." />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Poppins font to match the Mr Zisidis hub style -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+  <!-- Header / Breadcrumbs -->
+  <header class="sticky top-0 z-50 bg-slate-50/80 backdrop-blur-lg border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2 text-xs md:text-sm text-slate-600">
+        <a href="https://mrzisidis.github.io/" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold" aria-label="CS Hub">
+          <span aria-hidden="true">🏠</span>
+          <span class="hidden sm:inline ml-1">CS Hub</span>
+        </a>
+        <span class="text-slate-300">/</span>
+        <a href="./" class="text-indigo-600 hover:text-indigo-800 font-semibold">iGCSE Mini Websites</a>
+        <span class="text-slate-300">/</span>
+        <span class="text-slate-800 font-semibold">Revision Portal</span>
+      </div>
+      <a href="./" class="text-xs font-semibold text-slate-500 hover:text-indigo-600 transition-colors">
+        ← Back to iGCSE Home
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="bg-indigo-950 text-white py-12 relative overflow-hidden">
+    <div class="absolute -right-32 -top-32 w-96 h-96 bg-indigo-700 rounded-full blur-3xl opacity-20"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-800/60 border border-indigo-700 text-indigo-300 text-xs font-semibold rounded-full mb-3">
+            <span>🎯</span> Pearson Edexcel 4CP0
+          </div>
+          <h1 class="text-3xl md:text-4xl font-bold text-white leading-tight">
+            iGCSE CS Revision Portal
+          </h1>
+          <p class="mt-2 text-sm md:text-base text-indigo-200 max-w-2xl">
+            Interactive checklists, past paper tools, mock preparation guides, and the essential Edexcel pseudocode syntax companion.
+          </p>
+        </div>
+
+        <!-- Master Revision Progress Widget -->
+        <div class="bg-indigo-900/50 border border-indigo-700/50 p-4 rounded-xl w-full md:w-80">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-indigo-300">Revision Mastery</span>
+            <span id="overall-percentage" class="text-sm font-bold text-indigo-400">0%</span>
+          </div>
+          <div class="w-full bg-indigo-950 h-3 rounded-full overflow-hidden">
+            <div id="overall-progress-bar" class="bg-gradient-to-r from-teal-400 to-indigo-400 h-full transition-all duration-500" style="width: 0%"></div>
+          </div>
+          <p class="mt-2 text-[11px] text-indigo-300 italic text-center">
+            Tick off subtopics in the checklist below to track your progress!
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Hub Layout -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
+    <!-- Tab Controls -->
+    <div class="flex flex-wrap gap-2 border-b border-slate-200 pb-4 mb-8">
+      <button onclick="switchTab('checklist')" id="tab-checklist" class="tab-btn active px-4 py-2 text-sm font-bold rounded-lg bg-indigo-600 text-white shadow-sm transition-all">
+        📋 Revision Checklist
+      </button>
+      <button onclick="switchTab('pseudocode')" id="tab-pseudocode" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all">
+        🐍 Edexcel Pseudocode
+      </button>
+      <button onclick="switchTab('recall')" id="tab-recall" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all">
+        🧠 Active Recall Cards
+      </button>
+      <button onclick="switchTab('pastpapers')" id="tab-pastpapers" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all">
+        📝 Exam & Mock Prep
+      </button>
+    </div>
+
+    <!-- TAB 1: REVISION CHECKLIST -->
+    <section id="section-checklist" class="tab-section block">
+      <div class="grid lg:grid-cols-3 gap-8">
+        <!-- Main Checklist content -->
+        <div class="lg:col-span-2 space-y-8">
+          <div class="flex justify-between items-center bg-white p-4 rounded-xl border border-slate-200">
+            <span class="text-sm text-slate-500 font-medium">Tick circles to update status: <span class="inline-block w-3 h-3 bg-red-400 rounded-full mx-1"></span> Not Started, <span class="inline-block w-3 h-3 bg-amber-400 rounded-full mx-1"></span> Improving, <span class="inline-block w-3 h-3 bg-emerald-400 rounded-full mx-1"></span> Mastered</span>
+            <button onclick="resetChecklist()" class="text-xs font-semibold text-red-600 hover:text-red-700 transition">Reset All</button>
+          </div>
+
+          <!-- Paper 1 Topics -->
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="bg-indigo-900 text-white px-6 py-4">
+              <h3 class="font-bold text-lg">Paper 1: Principles of Computer Science</h3>
+              <p class="text-xs text-indigo-200">Syllabus specifications and knowledge requirements</p>
+            </div>
+            
+            <div class="divide-y divide-slate-100">
+              <!-- Topic 1 -->
+              <div class="p-6">
+                <h4 class="font-bold text-slate-900 mb-3 flex items-center justify-between">
+                  <span>Topic 1: Computational Thinking</span>
+                  <span class="text-xs font-semibold px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded-full">Core Principles</span>
+                </h4>
+                <div class="space-y-4">
+                  <div class="flex items-start gap-4 p-2.5 rounded-lg hover:bg-slate-50 transition">
+                    <button onclick="cycleStatus('t1-1')" class="status-btn mt-1 flex-shrink-0 w-5 h-5 rounded-full border-2 border-red-400 bg-red-400 transition" id="btn-t1-1" data-status="0"></button>
+                    <div>
+                      <h5 class="text-sm font-semibold text-slate-800">Decomposition & Abstraction</h5>
+                      <p class="text-xs text-slate-500 mt-0.5">Deconstruct complex real-world situations into structured solvable problems and strip away irrelevant variables.</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-4 p-2.5 rounded-lg hover:bg-slate-50 transition">
+                    <button onclick="cycleStatus('t1-2')" class="status-btn mt-1 flex-shrink-0 w-5 h-5 rounded-full border-2 border-red-400 bg-red-400 transition" id="btn-t1-2" data-status="0"></button>
+                    <div>
+                      <h5 class="text-sm font-semibold text-slate-800">Standard Search Algorithms</h5>
+                      <p class="text-xs text-slate-500 mt-0.5">Conduct Linear and Binary search operations. Compute midpoints and evaluate relative time efficiencies.</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-4 p-2.5 rounded-lg hover:bg-slate-50 transition">
+                    <button onclick="cycleStatus('t1-3')" class="status-btn mt-1 flex-shrink-0 w-5 h-5 rounded-full border-2 border-red-400 bg-red-400 transition" id="btn-t1-3" data-status="0"></button>
+                    <div>
+                      <h5 class="text-sm font-semibold text-slate-800">Standard Sort Algorithms</h5>
+                      <p class="text-xs text-slate-500 mt-0.5">Trace Bubble sort and Merge sort steps. Understand the recursive divide-and-conquer logic of Merge sort.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Topic 2 -->
+              <div class="p-6">
+                <h4 class="font-bold text-slate-900 mb-3 flex items-center justify-between">
+                  <span>Topic 2: Data Representation</span>
+                  <span class="text-xs font-semibold px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded-full">Numbers & Binary</span>
+                </h4>
+                <div class="space-y-4">
+                  <div class="flex items-start gap-4 p-2.5 rounded-lg hover:bg-slate-50 transition">
+                    <button onclick="cycleStatus('t2-1')" class="status-btn mt-1 flex-shrink-0 w-5 h-5 rounded-full border-2 border-red-400 bg-red-400 transition" id="btn-t2-1" data-status="0"></button>
+                    <div>
+                      <h5 class="text-sm font-semibold text-slate-800">Binary & Hex Conversions</h5>
+                      <p class="text-xs text-slate-500 mt-0.5">Convert fluidly between Denary, Binary (up to 8 bits), and Hexadecimal values.</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-4 p-2.5 rounded-lg hover:bg-slate-50 transition">
+                    <button onclick="cycleStatus('t2-2')" class="status-btn mt-1 flex-shrink-0 w-5 h-5 rounded-full border-2 border-red-400 bg-red-400 transition" id="btn-t2-2" data-status="0"></button>
+                    <div>
+                      <h5 class="text-sm font-semibold text-slate-800">Binary Arithmetic & Overflow</h5>
+                      <p class="text-xs text-slate-500 mt-0.5">Perform binary addition, logical/arithmetic shifts, and handle standard overflow error logic.</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-4 p-2.5 rounded-lg hover:bg-slate-50 transition">
+                    <button onclick="cycleStatus('t2-3')" class="status-btn mt-1 flex-shrink-0 w-5 h-5 rounded-full border-2 border-red-400 bg-red-400 transition" id="btn-t2-3" data-status="0"></button>
+                    <div>
+                      <h5 class="text-sm font-semibold text-slate-800">Characters, Images & Sounds</h5>
+                      <p class="text-xs text-slate-500 mt-0.5">Explain ASCII vs Unicode. Define pixel resolution, color depth, sound sample rates, and sample size calculations.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Topic 3 & 4 -->
+              <div class="p-6">
+                <h4 class="font-bold text-slate-900 mb-3 flex items-center justify-between">
+                  <span>Topic 3 & 4: Hardware, Networks & Security</span>
+                  <span class="text-xs font-semibold px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded-full">Systems & Web</span>
+                </h4>
+                <div class="space-y-4">
+                  <div class="flex items-start gap-4 p-2.5 rounded-lg hover:bg-slate-50 transition">
+                    <button onclick="cycleStatus('t3-1')" class="status-btn mt-1 flex-shrink-0 w-5 h-5 rounded-full border-2 border-red-400 bg-red-400 transition" id="btn-t3-1" data-status="0"></button>
+                    <div>
+                      <h5 class="text-sm font-semibold text-slate-800">von Neumann Architecture & CPU</h5>
+                      <p class="text-xs text-slate-500 mt-0.5">Understand registers (MAR, MDR, PC, ACC), cache memory, clock speed, and core count impact on execution rates.</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-4 p-2.5 rounded-lg hover:bg-slate-50 transition">
+                    <button onclick="cycleStatus('t3-2')" class="status-btn mt-1 flex-shrink-0 w-5 h-5 rounded-full border-2 border-red-400 bg-red-400 transition" id="btn-t3-2" data-status="0"></button>
+                    <div>
+                      <h5 class="text-sm font-semibold text-slate-800">TCP/IP Protocol Stack & Speed</h5>
+                      <p class="text-xs text-slate-500 mt-0.5">Explain Application, Transport, Internet, and Link layers. Calculate theoretical data transmission bandwidth times.</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-4 p-2.5 rounded-lg hover:bg-slate-50 transition">
+                    <button onclick="cycleStatus('t3-3')" class="status-btn mt-1 flex-shrink-0 w-5 h-5 rounded-full border-2 border-red-400 bg-red-400 transition" id="btn-t3-3" data-status="0"></button>
+                    <div>
+                      <h5 class="text-sm font-semibold text-slate-800">Security Threats & Defenses</h5>
+                      <p class="text-xs text-slate-500 mt-0.5">Map malware, phishing, brute force, and DDOS to defensive techniques like firewalls, encryption, and pentesting.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Paper 2 Topics -->
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="bg-violet-900 text-white px-6 py-4">
+              <h3 class="font-bold text-lg">Paper 2: Application of Computational Thinking</h3>
+              <p class="text-xs text-violet-200">Practical algorithmic skills and Python concepts</p>
+            </div>
+            
+            <div class="divide-y divide-slate-100">
+              <div class="p-6">
+                <h4 class="font-bold text-slate-900 mb-3 flex items-center justify-between">
+                  <span>Topic 5: Algorithm Design & Programming</span>
+                  <span class="text-xs font-semibold px-2 py-0.5 bg-violet-50 text-violet-700 rounded-full">Python / Code</span>
+                </h4>
+                <div class="space-y-4">
+                  <div class="flex items-start gap-4 p-2.5 rounded-lg hover:bg-slate-50 transition">
+                    <button onclick="cycleStatus('t5-1')" class="status-btn mt-1 flex-shrink-0 w-5 h-5 rounded-full border-2 border-red-400 bg-red-400 transition" id="btn-t5-1" data-status="0"></button>
+                    <div>
+                      <h5 class="text-sm font-semibold text-slate-800">Sequence, Selection & Iteration</h5>
+                      <p class="text-xs text-slate-500 mt-0.5">Build nested conditional loops (IF-ELSE, WHILE, FOR) and utilize boolean conditions correctly.</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-4 p-2.5 rounded-lg hover:bg-slate-50 transition">
+                    <button onclick="cycleStatus('t5-2')" class="status-btn mt-1 flex-shrink-0 w-5 h-5 rounded-full border-2 border-red-400 bg-red-400 transition" id="btn-t5-2" data-status="0"></button>
+                    <div>
+                      <h5 class="text-sm font-semibold text-slate-800">Array Manipulation (1D & 2D)</h5>
+                      <p class="text-xs text-slate-500 mt-0.5">Read, write, update, and search data across static single or multi-dimensional collections.</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-4 p-2.5 rounded-lg hover:bg-slate-50 transition">
+                    <button onclick="cycleStatus('t5-3')" class="status-btn mt-1 flex-shrink-0 w-5 h-5 rounded-full border-2 border-red-400 bg-red-400 transition" id="btn-t5-3" data-status="0"></button>
+                    <div>
+                      <h5 class="text-sm font-semibold text-slate-800">Subprograms, Scope & File I/O</h5>
+                      <p class="text-xs text-slate-500 mt-0.5">Construct procedures/functions with local vs global variable scopes. Read/write structural external text files.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar Tips & Guides -->
+        <div class="space-y-6">
+          <div class="bg-amber-50 border border-amber-200 p-6 rounded-xl">
+            <h4 class="font-bold text-amber-900 mb-2 flex items-center gap-2">
+              <span>💡</span> Revision Advice
+            </h4>
+            <p class="text-xs text-amber-800 leading-relaxed">
+              Don't just read the syllabus! Active recall is the fastest way to master concepts.
+            </p>
+            <ul class="text-xs text-amber-800 space-y-2 mt-4 list-disc pl-4">
+              <li>Use the <strong>Active Recall Cards</strong> tab for quiz exercises.</li>
+              <li>Read the <strong>Edexcel Pseudocode</strong> section to avoid basic programming format mistakes.</li>
+              <li>Aim for at least 80% on the mock analysis parameters before going into the real papers.</li>
+            </ul>
+          </div>
+
+          <div class="bg-indigo-50 border border-indigo-200 p-6 rounded-xl">
+            <h4 class="font-bold text-indigo-900 mb-2">Pearson Spec Focus</h4>
+            <p class="text-xs text-indigo-800 leading-relaxed mb-4">
+              Pearson Edexcel iGCSE requires absolute accuracy in describing specific terms. Ensure you know definitions for:
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-[10px] font-semibold bg-white border border-indigo-200 px-2 py-1 rounded text-indigo-700">Decomposition</span>
+              <span class="text-[10px] font-semibold bg-white border border-indigo-200 px-2 py-1 rounded text-indigo-700">Abstraction</span>
+              <span class="text-[10px] font-semibold bg-white border border-indigo-200 px-2 py-1 rounded text-indigo-700">Von Neumann</span>
+              <span class="text-[10px] font-semibold bg-white border border-indigo-200 px-2 py-1 rounded text-indigo-700">TCP/IP Stack</span>
+              <span class="text-[10px] font-semibold bg-white border border-indigo-200 px-2 py-1 rounded text-indigo-700">Midpoint Algorithm</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: EDEXCEL PSEUDOCODE -->
+    <section id="section-pseudocode" class="tab-section hidden bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8">
+      <div class="flex items-center gap-3 mb-6">
+        <span class="text-3xl">📝</span>
+        <div>
+          <h3 class="text-2xl font-bold text-slate-900">Pearson Edexcel Pseudocode Guide</h3>
+          <p class="text-sm text-slate-500">The specific syntax required in written algorithms in Paper 1 and Paper 2.</p>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- Left Side: Structure & Examples -->
+        <div class="space-y-6">
+          <h4 class="text-lg font-bold text-indigo-600 border-b border-indigo-50 pb-2">Syntax Cheat Sheet</h4>
+          
+          <div class="space-y-4">
+            <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
+              <h5 class="text-sm font-bold text-slate-800 mb-1">Variable Assignment</h5>
+              <code class="text-xs bg-slate-900 text-teal-400 px-2 py-1 rounded block mb-2">SET variable TO value</code>
+              <p class="text-xs text-slate-600 italic">Example: <code class="bg-slate-200 px-1 rounded text-slate-800">SET count TO 0</code></p>
+            </div>
+
+            <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
+              <h5 class="text-sm font-bold text-slate-800 mb-1">Input / Output</h5>
+              <code class="text-xs bg-slate-900 text-teal-400 px-2 py-1 rounded block mb-1">SEND "message" TO USER</code>
+              <code class="text-xs bg-slate-900 text-teal-400 px-2 py-1 rounded block mb-2">RECEIVE variable FROM USER</code>
+              <p class="text-xs text-slate-600 italic">Outputs text to user screen and captures variables input.</p>
+            </div>
+
+            <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
+              <h5 class="text-sm font-bold text-slate-800 mb-1">Selection (IF-THEN-ELSE)</h5>
+              <pre class="text-xs bg-slate-900 text-teal-400 p-2.5 rounded block">IF count > 10 THEN
+  SEND "High" TO USER
+ELSE
+  SEND "Low" TO USER
+END IF</pre>
+            </div>
+
+            <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
+              <h5 class="text-sm font-bold text-slate-800 mb-1">Conditional Iteration (WHILE-DO)</h5>
+              <pre class="text-xs bg-slate-900 text-teal-400 p-2.5 rounded block">WHILE count < 5 DO
+  SET count TO count + 1
+END WHILE</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Pseudocode Interactive Playground/Drill -->
+        <div class="space-y-6 bg-slate-50 p-6 rounded-xl border border-slate-100">
+          <h4 class="text-lg font-bold text-indigo-600 border-b border-indigo-50 pb-2">Quick Translation Check</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Practice translating basic Python concepts into strict Pearson Edexcel Pseudocode format. Select a task below to see the target:
+          </p>
+
+          <div class="space-y-4">
+            <div class="flex gap-2">
+              <button onclick="loadExercise(1)" class="text-xs font-semibold px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded">Exercise 1: Assignment</button>
+              <button onclick="loadExercise(2)" class="text-xs font-semibold px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded">Exercise 2: Loop</button>
+            </div>
+
+            <div class="bg-slate-900 rounded-lg p-4 text-white text-xs space-y-3">
+              <div>
+                <span class="text-slate-400 uppercase tracking-wider text-[10px] font-bold block mb-1">Python Input Code:</span>
+                <code id="python-exercise-code" class="text-amber-300 font-mono">Select an exercise...</code>
+              </div>
+              <hr class="border-slate-800">
+              <div>
+                <span class="text-slate-400 uppercase tracking-wider text-[10px] font-bold block mb-2">Write your Pearson Edexcel Pseudocode translation:</span>
+                <textarea id="user-pseudocode-input" rows="4" class="w-full bg-slate-950 border border-slate-800 text-teal-300 font-mono text-xs rounded p-2.5 focus:outline-none focus:border-teal-500" placeholder="Type here..."></pre>
+              </div>
+            </div>
+
+            <div class="flex gap-2">
+              <button onclick="checkPseudocode()" class="text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded">Submit Code</button>
+              <button onclick="revealPseudocode()" class="text-xs font-semibold bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded">Show Answer</button>
+            </div>
+            
+            <div id="exercise-feedback" class="text-xs p-3 rounded-lg hidden font-medium"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: ACTIVE RECALL CARDS -->
+    <section id="section-recall" class="tab-section hidden max-w-xl mx-auto space-y-6">
+      <div class="text-center mb-6">
+        <h3 class="text-2xl font-bold text-slate-900">Active Recall Cards</h3>
+        <p class="text-xs text-slate-500 mt-1">Challenge your retrieval capacity with standard exam theory definitions.</p>
+      </div>
+
+      <!-- Interactive Flashcard -->
+      <div onclick="flipCard()" class="perspective-1000 cursor-pointer h-72 w-full">
+        <div id="flashcard-inner" class="relative w-full h-full text-center transition-transform duration-500 transform-style-3d shadow-md hover:shadow-lg border border-slate-200 rounded-2xl bg-white flex flex-col justify-center items-center p-8">
+          
+          <!-- Front Face -->
+          <div class="absolute inset-0 flex flex-col justify-center items-center p-8 backface-hidden" id="card-front">
+            <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-2">Topic 1: Computational Thinking</span>
+            <p class="text-lg font-bold text-slate-900" id="card-question">What is decomposition?</p>
+            <span class="text-xs text-slate-400 mt-8 italic">Click card to reveal answer</span>
+          </div>
+
+          <!-- Back Face -->
+          <div class="absolute inset-0 flex flex-col justify-center items-center p-8 backface-hidden transform rotate-y-180 bg-indigo-50 border border-indigo-200 rounded-2xl hidden" id="card-back">
+            <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-2">Definition Check</span>
+            <p class="text-sm font-semibold text-slate-800 leading-relaxed" id="card-answer">Breaking down a large, complex problem into smaller, manageable, and more easily solvable sub-problems.</p>
+            <span class="text-xs text-slate-400 mt-8 italic">Click again to rotate back</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="flex justify-between items-center gap-4 mt-6">
+        <button onclick="prevCard()" class="text-sm font-semibold border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 px-4 py-2 rounded-lg">← Previous</button>
+        <span class="text-xs text-slate-500 font-semibold" id="card-counter">Card 1 of 5</span>
+        <button onclick="nextCard()" class="text-sm font-semibold border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 px-4 py-2 rounded-lg">Next →</button>
+      </div>
+    </section>
+
+    <!-- TAB 4: MOCK & EXAM PREP -->
+    <section id="section-pastpapers" class="tab-section hidden bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8">
+      <div class="flex items-center gap-3 mb-6">
+        <span class="text-3xl">📝</span>
+        <div>
+          <h3 class="text-2xl font-bold text-slate-900">Exam & Mock Preparation</h3>
+          <p class="text-sm text-slate-500">Practice templates and cohort review breakdowns for Pearson Edexcel examinations.</p>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="space-y-6">
+          <h4 class="text-lg font-bold text-indigo-600 border-b border-indigo-50 pb-2">Past Paper Resource Index</h4>
+          <p class="text-xs text-slate-600">
+            Familiarize yourself with the Pearson structure. In the real exam, your Paper 2 requires programming on a computer with real compilers. Use these targets:
+          </p>
+
+          <div class="space-y-4">
+            <div class="bg-indigo-50/50 border border-indigo-100 p-4 rounded-lg flex justify-between items-center">
+              <div>
+                <h5 class="text-sm font-bold text-indigo-900">Official Pearson Edexcel Specification</h5>
+                <p class="text-xs text-indigo-700 mt-0.5">Syllabus codes, computational rules, and requirements.</p>
+              </div>
+              <a href="https://qualifications.pearson.com/en/qualifications/edexcel-international-gcses/computer-science-2020.html" target="_blank" class="text-xs font-bold text-indigo-600 hover:underline">Link ↗</a>
+            </div>
+
+            <div class="bg-indigo-50/50 border border-indigo-100 p-4 rounded-lg flex justify-between items-center">
+              <div>
+                <h5 class="text-sm font-bold text-indigo-900">Paper 2 Practical Coding Structure</h5>
+                <p class="text-xs text-indigo-700 mt-0.5">Syntax check files, sample output text files, and starter templates.</p>
+              </div>
+              <span class="text-xs text-slate-400 font-semibold italic">Included in Hub</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-6 bg-slate-50 p-6 rounded-xl border border-slate-100">
+          <h4 class="text-lg font-bold text-indigo-600 border-b border-indigo-50 pb-2">Topic Weighting (Pearson focus)</h4>
+          <ul class="space-y-3 text-xs text-slate-600">
+            <li class="flex items-center justify-between">
+              <span>Paper 1 Theory (Computers, Networks, Security)</span>
+              <span class="font-bold text-slate-800">50% Weight</span>
+            </li>
+            <li class="flex items-center justify-between">
+              <span>Paper 2 Algorithmic Execution & Coding</span>
+              <span class="font-bold text-slate-800">50% Weight</span>
+            </li>
+          </ul>
+          <div class="mt-4 p-4 bg-amber-50 border border-amber-200 text-amber-800 rounded-lg text-xs leading-relaxed">
+            <strong>⚠️ Student Notice:</strong> In Edexcel iGCSE Computer Science, you cannot skip coding elements. You must be able to read and write complete Python programs directly in a computer session. Practice string operations, array loops, and file reads!
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-8 border-t border-slate-200 bg-white mt-12">
+    <div
+      class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-slate-600 flex flex-col items-center gap-3">
+      <div>
+        © <span id="year"></span> iGCSE CS Revision Portal — Pearson Edexcel 4CP0
+      </div>
+      <div>
+        <a href="./" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold underline">Return to iGCSE Mini-Websites</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // set footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Checklist status logic
+    // Statuses: 0 = Red (Not Started), 1 = Amber (Improving), 2 = Emerald (Mastered)
+    const checklistItems = [
+      't1-1', 't1-2', 't1-3',
+      't2-1', 't2-2', 't2-3',
+      't3-1', 't3-2', 't3-3',
+      't5-1', 't5-2', 't5-3'
+    ];
+
+    function loadChecklistState() {
+      let masteredCount = 0;
+      checklistItems.forEach(item => {
+        const savedVal = localStorage.getItem('igcse-checklist-' + item);
+        const btn = document.getElementById('btn-' + item);
+        if (btn) {
+          if (savedVal !== null) {
+            btn.setAttribute('data-status', savedVal);
+            applyStyle(btn, savedVal);
+            if (savedVal === '2') masteredCount++;
+          } else {
+            btn.setAttribute('data-status', '0');
+            applyStyle(btn, '0');
+          }
+        }
+      });
+      updateProgressBar(masteredCount);
+    }
+
+    // flip back card if shown to prevent confusion
+    function resetCardState() {
+      const inner = document.getElementById('flashcard-inner');
+      inner.classList.remove('transform', 'rotate-y-180');
+      document.getElementById('card-front').classList.remove('hidden');
+      document.getElementById('card-back').classList.add('hidden');
+    }
+
+    function applyStyle(btn, status) {
+      btn.className = "status-btn mt-1 flex-shrink-0 w-5 h-5 rounded-full border-2 transition duration-200";
+      if (status === '0') {
+        btn.classList.add('border-red-400', 'bg-red-400');
+      } else if (status === '1') {
+        btn.classList.add('border-amber-400', 'bg-amber-400');
+      } else if (status === '2') {
+        btn.classList.add('border-emerald-500', 'bg-emerald-500');
+      }
+    }
+
+    function cycleStatus(item) {
+      const btn = document.getElementById('btn-' + item);
+      let status = parseInt(btn.getAttribute('data-status'));
+      status = (status + 1) % 3;
+      btn.setAttribute('data-status', status);
+      localStorage.setItem('igcse-checklist-' + item, status);
+      applyStyle(btn, status.toString());
+      
+      // recalculate total progress
+      let masteredCount = 0;
+      checklistItems.forEach(id => {
+        const savedVal = localStorage.getItem('igcse-checklist-' + id);
+        if (savedVal === '2') masteredCount++;
+      });
+      updateProgressBar(masteredCount);
+    }
+
+    function resetChecklist() {
+      if (confirm("Are you sure you want to reset all checklist items back to Not Started?")) {
+        checklistItems.forEach(item => {
+          localStorage.removeItem('igcse-checklist-' + item);
+        });
+        loadChecklistState();
+      }
+    }
+
+    function updateProgressBar(masteredCount) {
+      const total = checklistItems.length;
+      const percent = Math.round((masteredCount / total) * 100);
+      document.getElementById('overall-percentage').textContent = percent + '%';
+      document.getElementById('overall-progress-bar').style.width = percent + '%';
+    }
+
+    // Call state loader
+    window.addEventListener('DOMContentLoaded', loadChecklistState);
+
+    // Tab switcher logic
+    function switchTab(tabName) {
+      // hide all sections
+      document.querySelectorAll('.tab-section').forEach(sec => {
+        sec.classList.add('hidden');
+        sec.classList.remove('block');
+      });
+      
+      // deactivate all buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.className = "tab-btn px-4 py-2 text-sm font-semibold rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all";
+      });
+
+      // active current
+      const activeSec = document.getElementById('section-' + tabName);
+      if (activeSec) {
+        activeSec.classList.remove('hidden');
+        activeSec.classList.add('block');
+      }
+
+      const activeBtn = document.getElementById('tab-' + tabName);
+      if (activeBtn) {
+        activeBtn.className = "tab-btn active px-4 py-2 text-sm font-bold rounded-lg bg-indigo-600 text-white shadow-sm transition-all";
+      }
+    }
+
+    // Interactive Pseudocode Practice
+    const exercises = {
+      1: {
+        python: 'num_items = 5\nprice = 10.99',
+        target: 'SET num_items TO 5\nSET price TO 10.99',
+        explanation: 'Variables in Edexcel pseudocode use "SET variable TO value"'
+      },
+      2: {
+        python: 'while total_score < 100:\n    total_score = total_score + value',
+        target: 'WHILE total_score < 100 DO\n  SET total_score TO total_score + value\nEND WHILE',
+        explanation: 'Loops use "WHILE condition DO ... END WHILE"'
+      }
+    };
+    let currentExerciseId = null;
+
+    function loadExercise(id) {
+      currentExerciseId = id;
+      document.getElementById('python-exercise-code').textContent = exercises[id].python;
+      document.getElementById('user-pseudocode-input').value = '';
+      
+      const feed = document.getElementById('exercise-feedback');
+      feed.classList.add('hidden');
+    }
+
+    function checkPseudocode() {
+      if (currentExerciseId === null) {
+        alert("Please select an exercise first!");
+        return;
+      }
+      const val = document.getElementById('user-pseudocode-input').value.trim().replace(/\r\n/g, '\n');
+      const target = exercises[currentExerciseId].target.trim().replace(/\r\n/g, '\n');
+      
+      const feed = document.getElementById('exercise-feedback');
+      feed.classList.remove('hidden');
+      
+      if (val.toLowerCase().replace(/\s+/g, '') === target.toLowerCase().replace(/\s+/g, '')) {
+        feed.className = "text-xs p-3 rounded-lg font-medium bg-emerald-50 border border-emerald-200 text-emerald-800";
+        feed.innerHTML = "🎉 <strong>Correct!</strong> Exceptional precision. Matches Pearson standard structures.";
+      } else {
+        feed.className = "text-xs p-3 rounded-lg font-medium bg-red-50 border border-red-200 text-red-800";
+        feed.innerHTML = "❌ <strong>Let's check again:</strong> Ensure you are using uppercase structures like SET/TO/WHILE/DO/END WHILE, and check parameter indentation.";
+      }
+    }
+
+    function revealPseudocode() {
+      if (currentExerciseId === null) return;
+      const feed = document.getElementById('exercise-feedback');
+      feed.classList.remove('hidden');
+      feed.className = "text-xs p-3 rounded-lg font-medium bg-indigo-50 border border-indigo-200 text-indigo-800";
+      feed.innerHTML = `<strong>Answer Target:</strong><br><pre class="font-mono mt-1 text-slate-800">${exercises[currentExerciseId].target}</pre><br><span class="text-[11px]">${exercises[currentExerciseId].explanation}</span>`;
+    }
+
+    // Active Recall Cards Data
+    const cards = [
+      { q: "What is decomposition?", a: "Breaking down a large, complex problem into smaller, manageable, and more easily solvable sub-problems." },
+      { q: "What is abstraction?", a: "Removing irrelevant details or information and keeping only the essential characteristics required to solve a problem." },
+      { q: "What are the four layers of the TCP/IP stack in order?", a: "1. Application Layer\n2. Transport Layer\n3. Internet Layer\n4. Link Layer" },
+      { q: "What is the difference between Unicode and ASCII?", a: "ASCII uses 7 or 8 bits, limiting it to English and basic symbols (128-256 characters). Unicode uses 16 or 32 bits, allowing representation of international languages and emojis globally." },
+      { q: "What is a Von Neumann CPU register?", a: "A highly fast, specialized internal memory location within the CPU. Examples include Program Counter (PC), Memory Address Register (MAR), and Accumulator (ACC)." }
+    ];
+    let cardIdx = 0;
+
+    function displayCard() {
+      document.getElementById('card-question').textContent = cards[cardIdx].q;
+      document.getElementById('card-answer').innerText = cards[cardIdx].a;
+      document.getElementById('card-counter').textContent = `Card ${cardIdx + 1} of ${cards.length}`;
+      resetCardState();
+    }
+
+    function flipCard() {
+      const inner = document.getElementById('flashcard-inner');
+      const front = document.getElementById('card-front');
+      const back = document.getElementById('card-back');
+      
+      if (front.classList.contains('hidden')) {
+        // card is on back, flip to front
+        inner.classList.remove('transform', 'rotate-y-180');
+        front.classList.remove('hidden');
+        back.classList.add('hidden');
+      } else {
+        // card is on front, flip to back
+        inner.classList.add('transform', 'rotate-y-180');
+        front.classList.add('hidden');
+        back.classList.remove('hidden');
+      }
+    }
+
+    function prevCard() {
+      cardIdx = (cardIdx - 1 + cards.length) % cards.length;
+      displayCard();
+    }
+
+    function nextCard() {
+      cardIdx = (cardIdx + 1) % cards.length;
+      displayCard();
+    }
+
+    window.addEventListener('DOMContentLoaded', displayCard);
+  </script>
+</body>
+
+</html>
